@@ -1,0 +1,42 @@
+all
+  hosts :   # host level always have higher priority
+    
+    web01 :
+      ansible_host: private_ip
+      #ansible_user : ec2_user (centos )
+      #ansible_ssh_private_key : classic_key # create key outside the service with the same name , add private_key
+  
+
+   web02 :
+      ansible_host: private_ip
+      #ansible_user : ec2_user (centos )
+      #ansible_ssh_private_key : classic_key # create key outside the service with the same name , add private_key
+  
+
+   db01 :
+      ansible_host: private_ip
+      #ansible_user : ec2_user (centos )
+      #ansible_ssh_private_key : classic_key # create key outside the service with the same name , add private_key
+  
+  children :
+       webserver :
+         hosts :
+           web01 :
+           web02 :
+       dbserver :
+         hosts :
+           db01 :
+
+  db_oragon :
+    children :
+       webserver :
+       dbserver :
+
+    vars :
+      ansible_ssh_private_key : classic_key
+      ansible_user : ec2_user (centos )
+  
+
+  # ansible all -m ping -i inventory
+  # ansible  webserver -m ping -i inventory
+      

@@ -1,0 +1,31 @@
+---
+- name : provisiong servers using while loop
+  hosts : all
+  become : yes
+  tasks :
+    - name : install ntp server on 'CentOS'
+      yum:
+        name : chrony
+        state : present
+      when: ansible_distribution == "CentOS"
+
+    - name : install ntp server on 'ubuntu'
+      apt:
+        name : ntp
+        state : present
+        update_cache: yes
+      when: ansible_distribution  == "Ubuntu"
+
+    - name : start ntp server on 'CentOS'
+      service:
+        name : chronyd
+        state : present
+        enable: yes
+      when: ansible_distribution  == "CentOS"
+
+    - name : install ntp server on 'Ubuntu'
+      service:
+        name : 
+        state : present
+        enable: yes
+      when: ansible_distribution  == "Ubuntu"
