@@ -1,36 +1,36 @@
 ---
 - name: creating aws ec2_instance # create Iam role  (access key and security key)
-# vim .bashrc  source .bashrc ( export access key and security key )
+     # vim .bashrc  source .bashrc ( export access key and security key )
   hosts: localhost
   gather_facts: False
   tasks:
-    - name: create key pair # sudo apt install python3-pip -y; pip (tab 2 times) pip3.10 install boto3
-      ec2_key:
-        name: samplekey
-        region : us-west-2
+- name: create key pair # sudo apt install python3-pip -y; pip (tab 2 times) pip3.10 install boto3
+    ec2_key:
+      name: samplekey
+      region : us-west-2
       register: out_key
 
-    - #name: print key
-      #debug:
-        #var: out_key
+- #name: print key
+  #debug:
+      #var: out_key
       
-    - name: save key
-      copy:
-        content: {{"out_key.key.private_key"}}
-        dest: ./samplekey.pem
+- name: save key
+    copy:
+      content: {{"out_key.key.private_key"}}
+      dest: ./samplekey.pem
       when: out_key.changed
 
-    - name: start an ec2_instance:  #ansible-galaxy collection install amazom.aws (install in control machine)
-      amazon.aws.ec2_instance
-         name: "public-compute-instance"
-         key_name: "samplekey"
-         #vpc_subnet_id: subnet-5ca1ab1e
-         instance_type: t2.micro
-         security_group: default
-         #network:
-           #assign_public_ip: true
-         image_id: ami-123456
-         exact_count: 1
-         region: us-west-2
-         tags:
-            Environment: Testing
+- name: start an ec2_instance:  #ansible-galaxy collection install amazom.aws (install in control machine)
+  amazon.aws.ec2_instance
+      name: "public-compute-instance"
+      key_name: "samplekey"
+      #vpc_subnet_id: subnet-5ca1ab1e
+      instance_type: t2.micro
+      security_group: default
+      #network:
+        #assign_public_ip: true
+      image_id: ami-123456
+      exact_count: 1
+      region: us-west-2
+      tags:
+        Environment: Testing
